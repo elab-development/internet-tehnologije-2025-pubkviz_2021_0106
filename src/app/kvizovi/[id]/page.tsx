@@ -1,16 +1,33 @@
-export default function QuizPage({
+import { db } from "@/db";
+import { kvizovi } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
+
+export default async function QuizPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>; // params is now a Promise
 }) {
-  return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold">
-        Quiz ID: {params.id}
-      </h1>
+  const { id } = await params; // unwrap the Promise
 
-      <p className="mt-4 text-gray-600">
-        This will later show quiz details, questions, leaderboard, and winners.
+  const result = await db
+    .select()
+    .from(kvizovi)
+    .where(eq(kvizovi.id, id))
+    .limit(1);
+
+  const quiz = result[0];
+
+  if (!quiz) {
+    notFound(); // 404 fallback
+  }
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold">{quiz.title}</h1>
+      <p className="mt-2">{quiz.description}</p>
+      <p className="mt-1 text-gray-500">
+        Created at: {quiz.createdAt?.toLocaleDateString()}
       </p>
     </div>
   );
