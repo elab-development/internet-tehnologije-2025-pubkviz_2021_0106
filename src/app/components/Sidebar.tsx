@@ -1,57 +1,64 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
-const GENRES = [
-    { id: "opsti", label: "Opsti" },
-  { id: "sportski", label: "Sportski" },
-  { id: "istorija", label: "Istorija" },
-  { id: "muzicki", label: "Muzicki" },
-  
-];
+const GENRES = ["opsti", "filmski", "sportski", "muzicki"];
 
-export default function Sidebar() {
-  const router = useRouter();
-  const params = useSearchParams();
+type Props = {
+  onFiltersChange: (search: string, zanr: string) => void;
+};
 
-  const search = params.get("search") ?? "";
-  const genres = params.get("genres")?.split(",") ?? [];
 
-  const updateParams = (newSearch: string, newGenres: string[]) => {
-    const sp = new URLSearchParams();
-    if (newSearch) sp.set("search", newSearch);
-    if (newGenres.length) sp.set("genres", newGenres.join(","));
-    router.push(`/?${sp.toString()}`);
+export default function Sidebar({ onFiltersChange }: Props) {
+  const [searchInput, setSearchInput] = useState("");
+  const [selectedZanr, setSelectedZanr] = useState("");
+
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+    onFiltersChange(value, selectedZanr);
   };
 
-  // Now render JSX for input + checkboxes
+  const handleGenreChange = (value: string) => {
+    setSelectedZanr(value);
+    onFiltersChange(searchInput, value);
+  };
+
   return (
-    <aside className="w-62.5 p-4 border-r border-gray-300">
+    <aside className="w-64 p-4 border-r space-y-4">
+      {/* Search */}
       <input
         type="text"
-        placeholder="Pretrazite kvizove..."
-        value={search}
-        onChange={e => updateParams(e.target.value, genres)}
-        className="w-full p-2 border rounded mb-4"
+        placeholder="Search quizzes..."
+        value={searchInput}
+        onChange={e => handleSearchChange(e.target.value)}
+        className="w-full border rounded p-2"
       />
 
+      {/* Genres */}
       <div>
-        <strong>Zanrovi</strong>
+        <h3 className="font-semibold mb-2">Genres</h3>
         {GENRES.map(g => (
-          <label key={g.id} className="flex items-center gap-2 mt-2">
+          <label key={g} className="flex items-center gap-2">
             <input
-              type="checkbox"
-              checked={genres.includes(g.id)}
-              onChange={() => {
-                const newGenres = genres.includes(g.id)
-                  ? genres.filter(id => id !== g.id)
-                  : [...genres, g.id];
-                updateParams(search, newGenres);
-              }}
+              type="radio"
+              name="zanr"
+              checked={selectedZanr === g}
+              onChange={() => handleGenreChange(g)}
             />
-            {g.label}
+            {g}
           </label>
         ))}
+
+        {/* Clear genre */}
+        {selectedZanr && (
+          <button
+            onClick={() => handleGenreChange("")}
+            className="text-sm text-blue-500 mt-2"
+          >
+            Clear genre
+          </button>
+        )}
       </div>
     </aside>
   );

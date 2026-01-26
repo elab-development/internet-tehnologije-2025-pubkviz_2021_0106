@@ -32,13 +32,15 @@ await db.transaction(async (tx) => {
         id: "7a0a1e00-9651-4071-86b8-ed32dba35bf9",
         title: "sportski",
         description: "sportski test",
-        hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf2"
+        hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf2",
+        zanr: "sportski"
        },
        {
         id: "7a0a1e00-9651-4071-86b8-ed32dba35bb9",
         title: "Opsti",
         description: "Opsti kviz",
-        hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf4"
+        hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf4",
+        zanr: "opsti"
        },
     ]);
 });

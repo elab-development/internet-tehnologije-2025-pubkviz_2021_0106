@@ -6,6 +6,7 @@ type QuizCardProps = {
     title: string;
     date: string;
     description: string;
+    zanr: string;
   };
 };
 

@@ -23,5 +23,5 @@ export const kvizovi = pgTable("kvizovi", {
     description: text("description"),
     hostId: uuid("host_id").notNull().references(()=>users.id, {onDelete: "cascade"}),
     createdAt: timestamp("created_at").defaultNow(),
-   
+    zanr: varchar("zanr",  { length: 100 }).notNull(),
 });
