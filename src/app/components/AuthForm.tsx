@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FormEvent,useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "./AuthProvider";
 
 
 
@@ -27,47 +28,36 @@ export default function AuthForm({ mode }: {mode: Mode}) {
 
 
     //submit
-    const handleSubmit = async (e: FormEvent) => {
-        e.preventDefault();
-        setErr("");
-        setLoading(true)
-        
-        try {
-            //postavljamo endpoint kako bismo znali koju rutu na back-u da gadjamo
-            const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register"
+    const { setAuthenticated } = useAuth();
 
-            //kreiramo body za request, pogledati src/app/auth/login/route.ts
-            const body = mode === "login" ? { email, password: pwd } : { username, email, password: pwd }
-            //saljemo zahtev i odgovor upisujemo u res
-            const res = await fetch(endpoint, {
-                method: "POST",
-                credentials: "include", // dozvoljava Set-Cookie na back-u
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body) //pretvara body u JSON string 
-            })
-            //u slucaju greske, ako je error kod 400-599
-            if (!res.ok) {
-                let message = "Greska pri autentifikaciji";
-                let data;
-                try {
-                    data = await res.json();
-                    message = data?.error ?? message;
-                } catch {
-                    message = (data as string) || message;
-                }
-                setErr(message);
-                return;
-            }
-            // Set-Cookie je već stigao iz API-ja, odradjeno na serveru
-            // teramo ga da ponovo pokrene sve serverske komponente, ucita cookie i azurira stanje
-            router.refresh();
-            router.push("/");
-        } finally {
-            setLoading(false); //cak I ako pukne kod, moramo da ugasimo loader
-        }
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  setErr("");
+  setLoading(true);
 
+  try {
+    const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/register";
+    const body = mode === "login" ? { email, password: pwd } : { username, email, password: pwd };
+    const res = await fetch(endpoint, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
 
-    }    
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      setErr(data?.error || "Greška pri autentifikaciji");
+      return;
+    }
+
+    const data = await res.json();
+    setAuthenticated(data); // <--- critical fix
+    router.push("/");
+  } finally {
+    setLoading(false);
+  }
+};
 
 
     return (
