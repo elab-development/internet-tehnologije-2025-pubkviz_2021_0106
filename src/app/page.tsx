@@ -48,7 +48,7 @@ export default function QuizListPage() {
     </div>
     
     </main>
-      <Sidebar2 />
+     
     
     </>
   );

@@ -21,18 +21,22 @@ type AuthState =
 // Pored stanja sadrži i funkciju za ponovno učitavanje auth podataka
 type Ctx = AuthState & {
   refresh: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 
 // Kreiranje Auth konteksta (inicijalno nema vrednost)
 const AuthContext = createContext<Ctx | null>(null);
 
+
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  // Globalno stanje autentifikacije
+    // Lokalno stanje koje čuva auth status i korisnika
   const [state, setState] = useState<AuthState>({
     status: "loading",
     user: null,
   });
+  
   // refresh funkcija poziva /api/auth/me rutu na back-endu
   // Proverava da li postoji validna sesija (cookie)
   // useCallback obezbeđuje da se funkcija ne rekreira pri svakom renderu
@@ -54,6 +58,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const logout = useCallback(async () => {
+  try {
+    await fetch("/api/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+  } finally {
+    setState({ status: "unauthenticated", user: null });
+  }
+}, []);
+
   // useEffect se izvršava pri prvom renderu
   // Pokreće proveru autentifikacije čim se aplikacija učita
   useEffect(() => {
@@ -62,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // useMemo čuva istu referencu context vrednosti
   // Menja se samo kada se promeni state ili refresh funkcija
-  const value = useMemo<Ctx>(() => ({ ...state, refresh }), [state, refresh]);
+  const value = useMemo<Ctx>(() => ({ ...state, refresh, logout }), [state, refresh]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
