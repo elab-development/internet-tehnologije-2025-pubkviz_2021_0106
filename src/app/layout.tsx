@@ -1,6 +1,6 @@
 
 import "./globals.css";
-
+import { AuthProvider } from "./components/AuthProvider";
 
 export default function RootLayout({
   children,
@@ -11,7 +11,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div style={{ display: "flex", minHeight: "100vh" }}>
+          <AuthProvider>
           {children}
+          </AuthProvider>
         </div>
       </body>
     </html>
