@@ -15,6 +15,27 @@
       "when": 1769449313504,
       "tag": "0001_premium_iron_patriot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769619196626,
+      "tag": "0002_broken_gamma_corps",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1769620500208,
+      "tag": "0003_absent_mysterio",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1769622429391,
+      "tag": "0004_condemned_silver_sable",
+      "breakpoints": true
     }
   ]
 }

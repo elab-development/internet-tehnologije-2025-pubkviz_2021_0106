@@ -1,0 +1,1 @@
+ALTER TABLE "pitanje" ADD COLUMN "oblast" text NOT NULL;

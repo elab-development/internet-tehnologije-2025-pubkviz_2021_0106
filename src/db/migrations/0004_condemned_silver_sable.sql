@@ -1,0 +1,1 @@
+ALTER TABLE "pitanje" ADD COLUMN "poeni" integer NOT NULL;
