@@ -1,14 +1,18 @@
+import { useAuth } from "@/app/components/AuthProvider";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { AUTH_COOKIE, cookieOpts, signAuthToken } from "@/lib/auth";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
 import { NextResponse } from "next/server";
 
 type Body = {
     email: string;
     password: string;
 };
+
+
 
 export async function POST(req: Request) {
     //parsiramo request, izdvajamo email i password
@@ -50,6 +54,7 @@ export async function POST(req: Request) {
     sub: u.id,
     email: u.email,
     username: u.username,
+    role: u.role,
   });
 
   // 6. Set cookie with JWT – postavljamo token u cookie

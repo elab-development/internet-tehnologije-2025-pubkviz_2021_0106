@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent,useState } from "react";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 import { useAuth } from "./AuthProvider";
 
 
@@ -57,10 +57,17 @@ const handleSubmit = async (e: FormEvent) => {
   } finally {
     setLoading(false);
   }
+
+ 
+
 };
 
+const {user} = useAuth();
+if (user) router.push(`/profile`);
 
-    return (
+
+    return ( 
+  
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8 w-full">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="test" 

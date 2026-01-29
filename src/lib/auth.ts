@@ -1,4 +1,8 @@
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import * as jwt from "jsonwebtoken"
+import { cookies } from "next/headers";
 
 export const AUTH_COOKIE = "auth";
 const JWT_SECRET = process.env.JWT_SECRET!;
@@ -11,6 +15,7 @@ export type JwtUserClaims = {
     sub: string; //subject - standardno za jwt obicno neki id
     email: string;
     username?: string;
+    role: string;
 }
 
 export function signAuthToken(claims: JwtUserClaims){
@@ -28,7 +33,8 @@ export function verifyAuthToken(token: string): JwtUserClaims {
     return {
         sub: payload.sub,
         email: payload.email,
-        username: payload.username
+        username: payload.username,
+        role: payload.role
     }
 }
 
@@ -41,4 +47,32 @@ export function cookieOpts() {
         path: "/", // dostupan na svim rutama
         maxAge: 60 * 60 * 24 * 7 // 7 dana traje cookie, nema potrebe da postoji duze od JWT
     }
+}
+
+
+
+
+
+export async function getCurrentUser() {
+  const token = (await cookies()).get(AUTH_COOKIE)?.value;
+  if (!token) return null;
+
+  try {
+    const claims = verifyAuthToken(token);
+
+    const [user] = await db
+      .select({
+        id: users.id,
+        username: users.username,
+        email: users.email,
+        createdAt: users.createdAt,
+        role: users.role, 
+      })
+      .from(users)
+      .where(eq(users.id, claims.sub));
+
+    return user ?? null;
+  } catch {
+    return null;
+  }
 }

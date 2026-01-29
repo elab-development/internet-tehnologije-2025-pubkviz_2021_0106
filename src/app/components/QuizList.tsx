@@ -6,19 +6,6 @@ import { db } from "@/db";
 import { kvizovi } from "@/db/schema";
 import { useSearchParams } from "next/navigation";
 
-const quizzes1 = [
-  {
-    id: 1,
-    title: "Opsti kviz Oktopab 12/1/2026",
-    genres: ["opsti", "istorija"],
-  },
-  {
-    id: 2,
-    title: "Sportski kviz",
-    genres: ["sportski"],
-  },
-];
-
 const quizzes = (await db.select().from(kvizovi)).map(q => ({
     id: q.id, // UUID → string
     title: q.title,
