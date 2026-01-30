@@ -13,6 +13,7 @@ export default async function QuizPage({
 }) {
   const { id } = await params; // unwrap the Promise
 
+  
   {/*const result = await db
     .select()
     .from(kvizovi)
@@ -38,9 +39,10 @@ export default async function QuizPage({
     .from(pitanje)
     .where(eq(pitanje.idKviza, quiz.id));
 
-
+ 
 
   return (
+    
     <div className="p-6 max-w-3xl mx-auto">
       <div className="flex gap-50">
         <h1 className="text-2xl font-bold">{quiz.title}</h1>
@@ -55,7 +57,7 @@ export default async function QuizPage({
       {/* samo pitanja za taj kviz */}
         {pitanja.map((p) => (  //p.idKviza===quiz.id ? (
     <div key={p.id}>
-      <p className="p-5">{p.id-1}. {p.pitanje}</p>
+      <p className="p-5">{p.id}. {p.pitanje}</p>
       <div className="text-amber-400 bg-amber-400 hover:bg-blue-700 ">
             <p className="p-5">{p.odgovor}</p>
       </div>

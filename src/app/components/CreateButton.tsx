@@ -11,7 +11,7 @@ export default function CreateButton (){
     <button
       onClick={()=>!(user.user) || user.user.role==="Ucesnik" 
         ? alert("Nemate dozvolu da napravite novi kviz.") 
-        : router.push(`/kreiraj`)
+        : router.push(`/kvizovi/kreiraj`)
 
 
 
