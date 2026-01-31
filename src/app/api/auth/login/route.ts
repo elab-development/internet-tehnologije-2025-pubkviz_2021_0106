@@ -63,6 +63,7 @@ const res = NextResponse.json({
     id: u.id,
     username: u.username,
     email: u.email,
+    role: u.role,
 });
 
 res.cookies.set(AUTH_COOKIE, token, cookieOpts());

@@ -1,20 +1,9 @@
 "use client";
-
 export const dynamic = "force-dynamic";
-
-
-import Image from "next/image";
 import Sidebar from "./components/Sidebar";
-import QuizList from "./components/QuizList";
-import Sidebar2 from "./components/Sidebar2";
-import QuizCard from "./components/QuizCard";
-import { db } from "@/db";
-import { kvizovi } from "@/db/schema";
-import { and, eq, ilike } from "drizzle-orm";
+import QuizCard from "./components/QuizCard"; 
+//import QuizList from "./components/QuizList";import Sidebar2 from "./components/Sidebar2";
 import { useEffect, useState } from "react";
-
-
-
 export default function QuizListPage() {
   const [search, setSearch] = useState("");
   const [zanr, setZanr] = useState("");
@@ -43,13 +32,8 @@ export default function QuizListPage() {
       {quizzes.map(q => (
         <QuizCard key={q.id} quiz={q} />
       ))}
-
-      
     </div>
-    
     </main>
-     
-    
     </>
   );
 }

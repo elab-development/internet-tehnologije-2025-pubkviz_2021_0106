@@ -26,7 +26,7 @@ export async function noviKviz(formData: FormData) {
     
       title,
       description,
-        hostId: user.id, // 🔥 VEZA SA USEROM
+        hostId: user.id, 
       zanr,
      
     })

@@ -25,19 +25,17 @@ export default function Sidebar({ onFiltersChange }: Props) {
   };
 
   return (
-    <aside className="w-64 p-4 border-r space-y-4">
-      {/* Search */}
+    <aside className="w-64 p-4 border-r space-y-4">    
       <input
         type="text"
-        placeholder="Search quizzes..."
+        placeholder="Pretrazite kvizove..."
         value={searchInput}
         onChange={e => handleSearchChange(e.target.value)}
         className="w-full border rounded p-2"
       />
 
-      {/* Genres */}
       <div>
-        <h3 className="font-semibold mb-2">Genres</h3>
+        <h3 className="font-semibold mb-2">Zanrovi</h3>
         {GENRES.map(g => (
           <label key={g} className="flex items-center gap-2">
             <input
@@ -49,14 +47,12 @@ export default function Sidebar({ onFiltersChange }: Props) {
             {g}
           </label>
         ))}
-
-        {/* Clear genre */}
         {selectedZanr && (
           <button
             onClick={() => handleGenreChange("")}
             className="text-sm text-blue-500 mt-2"
           >
-            Clear genre
+            Ukloni filter
           </button>
         )}
       </div>

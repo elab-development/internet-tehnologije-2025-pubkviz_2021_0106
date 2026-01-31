@@ -54,7 +54,7 @@ if (!pitanjeIdRaw) throw new Error("Fali pitanjeId");
 
    await db
     .delete(pitanje)
-    .where(and(eq(pitanje.id, pitanjeId), eq(pitanje.idKviza, quizId) )// dodatna sigurnost
+    .where(and(eq(pitanje.id, pitanjeId), eq(pitanje.idKviza, quizId) )
       
     );
     redirect(`/kvizovi/${quizId}`);

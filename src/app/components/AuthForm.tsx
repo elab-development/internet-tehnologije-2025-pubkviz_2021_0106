@@ -5,8 +5,6 @@ import { FormEvent,useState } from "react";
 import { notFound, useRouter } from "next/navigation";
 import { useAuth } from "./AuthProvider";
 
-
-
 type Mode = "login" | "register";
 
 export default function AuthForm({ mode }: {mode: Mode}) {
@@ -52,14 +50,11 @@ const handleSubmit = async (e: FormEvent) => {
     }
 
     const data = await res.json();
-    setAuthenticated(data); // <--- critical fix
+    setAuthenticated(data); 
     router.push("/");
   } finally {
     setLoading(false);
   }
-
- 
-
 };
 
 const {user} = useAuth();
