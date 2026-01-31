@@ -36,6 +36,13 @@
       "when": 1769622429391,
       "tag": "0004_condemned_silver_sable",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1769817077028,
+      "tag": "0005_natural_the_captain",
+      "breakpoints": true
     }
   ]
 }
