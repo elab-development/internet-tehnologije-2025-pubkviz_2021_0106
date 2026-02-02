@@ -10,7 +10,50 @@ const idOpsti = "7a0a1e00-9651-4071-86b8-ed32dba35bb9";
 
 await db.transaction(async (tx) => {
 
+           await tx.insert(users).values([
+            {
+            //id: "7a0a1e00-9651-4071-86b8-ed32dba35bf2",
+            username: "coa",
+            email: "coa@gmail.com",
+            role:"Administrator",
+            passHash: hash,
+        },
+        {
+            id: "7a0a1e00-9651-4071-86b8-ed32dba35bf2",
+            username: "Nikola Tesla",
+            email: "tesla@gmail.com",
+            passHash: hash,
+        },
+        {
+            id: "7a0a1e00-9651-4071-86b8-ed32dba35bf3",
+            username: "Petar Petrović",
+            email: "petrovic@gmail.com",
+            passHash: hash,
+        },
+        {
+            id: "7a0a1e00-9651-4071-86b8-ed32dba35bf4",
+            username: "Novak Đoković",
+            email: "djokovic@gmail.com",
+            passHash: hash,
+        },
+    ]);
 
+    await tx.insert(kvizovi).values([
+       {
+        id: "7a0a1e00-9651-4071-86b8-ed32dba35bf9",
+        title: "sportski",
+        description: "sportski test",
+        hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf2",
+        zanr: "sportski"
+       },
+       {
+        id: "7a0a1e00-9651-4071-86b8-ed32dba35bb9",
+        title: "Opsti",
+        description: "Opsti kviz",
+        hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf4",
+        zanr: "opsti"
+       },
+    ]);
 
     await tx.insert(pitanje).values([
             {
@@ -147,4 +190,3 @@ await db.transaction(async (tx) => {
 });
 
 process.exit(0);
-
