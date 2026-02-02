@@ -1,7 +1,13 @@
+import { getCurrentUser } from "@/lib/auth";
 import { noviKviz } from "./actions";
+import { notFound } from "next/navigation";
 
 
-export default function CreateQuiz() {
+export default async function CreateQuiz() {
+const user = await getCurrentUser();
+  if (!user || (user.role !== "Administrator" && user.role !== "Organizator")) {
+          notFound();
+        }
     return(
          
     <div className="max-w-xl mx-auto">
