@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { kvizovi } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
-import { redirect, notFound } from "next/navigation";
+import { redirect, notFound } from "next/navigation.js";
 
 export async function noviKviz(formData: FormData) {
   const user = await getCurrentUser();

@@ -43,7 +43,7 @@ export default function EditForm({ quizId }: { quizId: string }) {
           required
         />
 
-        <button className="bg-amber-600 hover:bg-blue-400 p-2 rounded">
+        <button id="dodajPitanje" className="bg-amber-600 hover:bg-blue-400 p-2 rounded">
           Submit
         </button>
       </form>
@@ -60,7 +60,7 @@ export default function EditForm({ quizId }: { quizId: string }) {
         required
       />
 
-      <button className="bg-red-600 hover:bg-red-400 p-2 rounded">
+      <button id="obrisiPitanje" className="bg-red-600 hover:bg-red-400 p-2 rounded">
         Obriši
       </button>
     </form>
@@ -80,9 +80,9 @@ export default function EditForm({ quizId }: { quizId: string }) {
   <input className="border rounded p-2" name="tekst" placeholder="Tekst pitanja" />
   <input className="border rounded p-2" name="odgovor" placeholder="Odgovor" />
   <input className="border rounded p-2" name="oblast" placeholder="Oblast" />
-  <input className="border rounded p-2" name="poeni" type="number" placeholder="Poeni" />
+  <input data-testid="edit-poeni" className="border rounded p-2" name="poeni" type="number" placeholder="Poeni" />
 
-  <button className="bg-blue-600 p-2 rounded hover:bg-amber-500">Sačuvaj</button>
+  <button data-testid="save-edit" id="izmeniPitanje" className="bg-blue-600 p-2 rounded hover:bg-amber-500">Sačuvaj</button>
 </form>
 
     </div>
