@@ -4,14 +4,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { ekipaId: string } }
+  context: { params: Promise<{ ekipaId: string }> }
 ) {
-  const ekipaId = Number(params.ekipaId); // ⬅️ iz URL-a
+  const { ekipaId } = await context.params; // ✅ uzimamo samo string
 
   const { userId } = await req.json();
 
   await db.insert(ekipaClanovi).values({
-    ekipaId,
+    ekipaId: Number(ekipaId), // ✅ konverzija u number
     userId,
   });
 
