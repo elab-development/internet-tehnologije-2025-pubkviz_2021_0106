@@ -6,6 +6,8 @@ import { getCurrentUser } from "@/lib/auth";
 import { and, eq } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 
+
+
 export async function addPitanje(formData: FormData) {
   const user = await getCurrentUser();
     
@@ -24,6 +26,21 @@ export async function addPitanje(formData: FormData) {
     throw new Error("Nedostaju podaci");
   }
 
+
+
+
+ const kviz = await db.query.kvizovi.findFirst({
+    where: and(
+      eq(kvizovi.id, quizId),
+      eq(kvizovi.hostId, user.id)
+    )
+  });
+if (!kviz && user.role !== "Administrator") {
+    return notFound();
+  }
+
+
+  
   await db.insert(pitanje).values({
     idKviza: quizId,
     pitanje: tekst,
@@ -52,6 +69,22 @@ if (!pitanjeIdRaw) throw new Error("Fali pitanjeId");
     throw new Error("Fale podaci");
   }
 
+
+
+
+   const kviz = await db.query.kvizovi.findFirst({
+    where: and(
+      eq(kvizovi.id, quizId),
+      eq(kvizovi.hostId, user.id)
+    )
+  });
+if (!kviz && user.role !== "Administrator") {
+    return notFound();
+  }
+
+
+
+
    await db
     .delete(pitanje)
     .where(and(eq(pitanje.id, pitanjeId), eq(pitanje.idKviza, quizId) )
@@ -77,6 +110,25 @@ if (!pitanjeIdRaw || !quizId)   throw new Error("Fali pitanjeId");
   const odgovor = formData.get("odgovor") as string;
   const oblast = formData.get("oblast") as string;
   const poeni = Number(formData.get("poeni"));
+
+
+
+
+
+   const kviz = await db.query.kvizovi.findFirst({
+    where: and(
+      eq(kvizovi.id, quizId),
+      eq(kvizovi.hostId, user.id)
+    )
+  });
+if (!kviz && user.role !== "Administrator") {
+    return notFound();
+  }
+
+
+
+
+  
 
   await db.update(pitanje).set({
     pitanje: tekst,
