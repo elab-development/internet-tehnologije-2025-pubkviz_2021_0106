@@ -7,7 +7,7 @@ import { kvizovi } from "@/db/schema";
 import { useSearchParams } from "next/navigation";
 
 const quizzes = (await db.select().from(kvizovi)).map(q => ({
-    id: q.id, // UUID → string
+    id: q.id, 
     title: q.title,
     description: q.description ?? "",
     date: q.createdAt
