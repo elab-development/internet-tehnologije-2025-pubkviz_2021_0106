@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { kvizovi, pitanje } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { and, eq } from "drizzle-orm";
-import { notFound, redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation.js";
 
 
 

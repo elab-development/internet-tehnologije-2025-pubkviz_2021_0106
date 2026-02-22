@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import * as jwt from "jsonwebtoken"
-import { cookies } from "next/headers";
+import { cookies } from "next/headers.js";
 
 export const AUTH_COOKIE = "auth";
 const JWT_SECRET = process.env.JWT_SECRET!;

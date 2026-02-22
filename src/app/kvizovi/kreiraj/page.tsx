@@ -33,7 +33,7 @@ const user = await getCurrentUser();
           className="border p-2 rounded"
         />
 
-        <button className="bg-green-600 text-white p-2 rounded hover:bg-green-300">
+        <button type="submit" className="bg-green-600 text-white p-2 rounded hover:bg-green-300">
           Kreiraj kviz
         </button>
       </form>

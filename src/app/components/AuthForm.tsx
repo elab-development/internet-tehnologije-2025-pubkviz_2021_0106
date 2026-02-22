@@ -58,7 +58,7 @@ const handleSubmit = async (e: FormEvent) => {
 };
 
 const {user} = useAuth();
-if (user) router.push(`/profile`);
+if (user) router.push(`/`);
 
 
     return ( 
@@ -95,6 +95,7 @@ if (user) router.push(`/profile`);
                     <div>
                         <label className="block text-sm font-medium text-gray-900">Email adresa</label>
                         <input
+                            name="email"
                             type="email"
                             required
                             value={email}
@@ -106,6 +107,7 @@ if (user) router.push(`/profile`);
                     <div>
                         <label className="block text-sm font-medium text-gray-900">Lozinka</label>
                         <input
+                        name="password"
                             type="password"
                             required
                             value={pwd}
