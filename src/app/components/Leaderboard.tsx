@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-// Tipovi podataka koje vraća tvoj SheetDB
 type Row = {
-  [key: string]: string; // fleksibilno da radi sa bilo kojim nazivom kolona
+  [key: string]: string;
 };
 
 export default function Leaderboard() {
@@ -16,7 +15,7 @@ export default function Leaderboard() {
       try {
         const res = await fetch(process.env.NEXT_PUBLIC_SHEETDB_URL!);
         const data = await res.json();
-        console.log("SheetDB data:", data); // ovo ti pokazuje JSON i ključeve
+        console.log("SheetDB data:", data); 
         setRows(data);
       } catch (err) {
         console.error("Greška pri fetch-u SheetDB:", err);
@@ -25,12 +24,12 @@ export default function Leaderboard() {
     fetchData();
   }, []);
 
-  // Ako je filter po sezoni postavljen
+  
   const filtered = seasonFilter
     ? rows.filter(r => r["Season"] === seasonFilter || r["Sezona"] === seasonFilter)
     : rows;
 
-  // Odredi ključeve za kolone automatski (uzimamo iz prvog reda)
+  
   const columns = rows[0] ? Object.keys(rows[0]) : [];
 
   return (

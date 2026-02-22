@@ -32,14 +32,14 @@ export default function Kalendar() {
 
       const now = new Date();
 
-      // ✅ Filtriranje samo budućih događaja
+      // Filtriranm samo buduće događaje
       items = items.filter((event) => {
         const dateStr = event.start?.dateTime || event.start?.date;
         if (!dateStr) return false;
 
         const eventDate = new Date(dateStr);
 
-        // Ako je all-day event (ima samo "date"), tretiraj ga kao kraj dana
+        
         if (event.start.date && !event.start.dateTime) {
           eventDate.setHours(23, 59, 59, 999);
         }
@@ -47,7 +47,7 @@ export default function Kalendar() {
         return eventDate >= now;
       });
 
-      // ✅ Sortiranje po datumu (najbliži prvi)
+      
       items.sort((a, b) => {
         const dateA = new Date(
           a.start?.dateTime || a.start?.date || ""
@@ -68,7 +68,7 @@ export default function Kalendar() {
     }
   };
 
-  // ✅ Prvi fetch + automatski refresh na 30s
+  // Prvi fetch + automatski refresh na 30s
   useEffect(() => {
     fetchEvents();
     const interval = setInterval(fetchEvents, 30000);

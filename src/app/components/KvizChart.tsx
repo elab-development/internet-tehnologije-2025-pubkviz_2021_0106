@@ -14,17 +14,17 @@ type Event = {
 
 export default function KvizChart() {
   const [chartData, setChartData] = useState<(string | number)[][]>([
-    ["Mesec", "Broj kvizova"], // header
+    ["Mesec", "Broj kvizova"], 
   ]);
 
   useEffect(() => {
-    // fetch događaja iz API-ja
+    
     const fetchEvents = async () => {
       const res = await fetch("/api/kalendar");
       const data = await res.json();
       const items: Event[] = data.items || [];
 
-      // broj kvizova po mesecima
+     
       const counts: { [month: string]: number } = {};
 
       items.forEach((event) => {
@@ -37,7 +37,7 @@ export default function KvizChart() {
         counts[month] = (counts[month] || 0) + 1;
       });
 
-      // formiraj podatke za chart
+      
       const chartRows: (string | number)[][] = [["Mesec", "Broj kvizova"]];
       for (const month of Object.keys(counts)) {
         chartRows.push([month, counts[month]]);
