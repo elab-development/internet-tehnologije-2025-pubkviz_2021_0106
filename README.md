@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<div style="color: #333333;">
 
-## Getting Started
+# Web aplikacija za praćenje pab kviza
 
-First, run the development server:
+Ova web aplikacija omogućava korisnicima da:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Pregledaju listu kvizova
+- Filtriraju kvizove po žanru i pretrazi
+- Vide kalendar budućih kvizova
+- Vide tabelu sa ekipama i rezultatima po sezonama
+- Uspešno logovanje korisnika ako su član tima
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tabele se mogu videti na: [Google Sheet](https://docs.google.com/spreadsheets/d/1fcBbPFDlEbIkWof8vQKsO8p8zV-T1CXHDkvXcjKYfKg/edit?gid=0#gid=0)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tehnologije koje su korišćene
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Next.js** + **React** (frontend)  
+- **TypeScript**  
+- **SheetDB + Google Sheet** (za čuvanje podataka o ekipama i rezultatima)
+- **Google Calendar API** (za prikaz događaja kvizova)
 
-## Learn More
+### Instalacija i pokretanje
 
-To learn more about Next.js, take a look at the following resources:
+1. Kloniraj repozitorijum git clone <URL_REPO>, cd <IME_PROJEKTA>
+2. Instaliraj zavisnosti npm install
+3. Pokreni development server npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+AUTORI :
+Aleksandar Perić 2021/0106
+Dimitrije Pavlović 2021/0148
+Dino Mustajbašić 2021/0020
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
