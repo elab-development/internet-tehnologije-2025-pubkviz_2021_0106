@@ -9,13 +9,14 @@ type Row = {
 export default function Leaderboard() {
   const [rows, setRows] = useState<Row[]>([]);
   const [seasonFilter, setSeasonFilter] = useState("");
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc" | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(process.env.NEXT_PUBLIC_SHEETDB_URL!);
         const data = await res.json();
-        console.log("SheetDB data:", data); 
+        console.log("SheetDB data:", data);
         setRows(data);
       } catch (err) {
         console.error("Greška pri fetch-u SheetDB:", err);
@@ -25,11 +26,31 @@ export default function Leaderboard() {
   }, []);
 
   
+  useEffect(() => {
+    setSortDirection(null);
+  }, [seasonFilter]);
+
+ 
   const filtered = seasonFilter
-    ? rows.filter(r => r["Season"] === seasonFilter || r["Sezona"] === seasonFilter)
+    ? rows.filter(
+        r => r["Season"] === seasonFilter || r["Sezona"] === seasonFilter
+      )
     : rows;
 
   
+  const sorted = [...filtered];
+
+  if (sortDirection) {
+    sorted.sort((a, b) => {
+      const aVal = Number(a["Rezultat"] ?? 0);
+      const bVal = Number(b["Rezultat"] ?? 0);
+
+      return sortDirection === "asc"
+        ? aVal - bVal
+        : bVal - aVal;
+    });
+  }
+
   const columns = rows[0] ? Object.keys(rows[0]) : [];
 
   return (
@@ -37,7 +58,11 @@ export default function Leaderboard() {
       <h2 className="text-xl font-bold mb-2">Tabela</h2>
 
       <label className="mr-2">Filtriraj po sezoni:</label>
-      <select value={seasonFilter} onChange={e => setSeasonFilter(e.target.value)}>
+      <select
+        value={seasonFilter}
+        onChange={e => setSeasonFilter(e.target.value)}
+        className="border p-1"
+      >
         <option value="">Sve sezone</option>
         <option value="23/24">23/24</option>
         <option value="24/25">24/25</option>
@@ -48,15 +73,35 @@ export default function Leaderboard() {
         <thead>
           <tr>
             {columns.map(col => (
-              <th key={col} className="border p-2">{col}</th>
+              <th
+                key={col}
+                className={`border p-2 ${
+                  col === "Rezultat" ? "cursor-pointer select-none" : ""
+                }`}
+                onClick={() => {
+                  if (col === "Rezultat") {
+                    setSortDirection(prev =>
+                      prev === "asc" ? "desc" : "asc"
+                    );
+                  }
+                }}
+              >
+                {col}
+                {col === "Rezultat" && sortDirection && (
+                  sortDirection === "asc" ? " ▲" : " ▼"
+                )}
+              </th>
             ))}
           </tr>
         </thead>
+
         <tbody>
-          {filtered.map((row, i) => (
+          {sorted.map((row, i) => (
             <tr key={i}>
               {columns.map(col => (
-                <td key={col} className="border p-2">{row[col]}</td>
+                <td key={col} className="border p-2">
+                  {row[col]}
+                </td>
               ))}
             </tr>
           ))}
