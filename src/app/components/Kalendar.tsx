@@ -68,7 +68,6 @@ export default function Kalendar() {
     }
   };
 
-  // Prvi fetch + automatski refresh na 30s
   useEffect(() => {
     fetchEvents();
     const interval = setInterval(fetchEvents, 30000);

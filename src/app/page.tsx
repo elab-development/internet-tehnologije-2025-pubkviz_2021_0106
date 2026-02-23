@@ -3,9 +3,9 @@ export const dynamic = "force-dynamic";
 
 import Sidebar from "./components/Sidebar";
 import QuizCard from "./components/QuizCard"; 
-import Kalendar from "./components/Kalendar"; // poboljšani kalendar
-import Leaderboard from "./components/Leaderboard"; // SheetDB leaderboard
-import KvizChart from "./components/KvizChart"; // nova komponenta za Google Charts
+import Kalendar from "./components/Kalendar"; 
+import Leaderboard from "./components/Leaderboard"; 
+import KvizChart from "./components/KvizChart"; 
 import { useEffect, useState } from "react";
 
 export default function QuizListPage() {
@@ -23,31 +23,35 @@ export default function QuizListPage() {
     setQuizzes(data);
   };
 
-  useEffect(() => {
-    fetchQuizzes();
-  }, [search, zanr]);
+  
 
   return (
     <>
-      {/* Sidebar sa filterima */}
+      
       <Sidebar onFiltersChange={(s, z) => { setSearch(s); setZanr(z); }} />
 
       <main className="flex-1 p-4 space-y-8">
-        {/* Lista kvizova */}
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
           {quizzes.map(q => (
             <QuizCard key={q.id} quiz={q} />
           ))}
         </div>
 
-        {/* Kalendar sa budućim događajima */}
-        <Kalendar />
+        
+        <div className="w-full max-w-2xl mx-auto">
+          <Kalendar />
+        </div>
 
-        {/* Grafik: broj kvizova po mesecima */}
-        <KvizChart />
+        
+        <div className="w-full max-w-2xl mx-auto">
+          <KvizChart />
+        </div>
 
-        {/* Leaderboard iz SheetDB */}
-        <Leaderboard />
+        
+        <div className="w-full max-w-2xl mx-auto">
+          <Leaderboard />
+        </div>
       </main>
     </>
   );

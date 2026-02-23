@@ -18,11 +18,14 @@
     "bcrypt": "^6.0.0",
     "drizzle-orm": "^0.45.1",
     "jsonwebtoken": "^9.0.3",
-    "next": "16.1.2",
+    "next": "^16.1.6",
     "pg": "^8.17.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "react-google-charts": "^5.2.1"
+    "react-google-charts": "^5.2.1",
+    "swagger-jsdoc": "^1.2.1",
+    "swagger-ui-express": "^5.0.1",
+    "swagger-ui-react": "^5.31.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
