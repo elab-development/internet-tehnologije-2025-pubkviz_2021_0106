@@ -23,7 +23,9 @@ export default function QuizListPage() {
     setQuizzes(data);
   };
 
-  
+  useEffect(() => {
+  fetchQuizzes();
+}, [search, zanr]);
 
   return (
     <>
