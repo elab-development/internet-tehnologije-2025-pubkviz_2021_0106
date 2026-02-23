@@ -36,7 +36,7 @@ await db.transaction(async (tx) => {
             email: "djokovic@gmail.com",
             passHash: hash,
         },
-    ]);
+    ]).onConflictDoNothing();
 
     await tx.insert(kvizovi).values([
        {
@@ -53,7 +53,7 @@ await db.transaction(async (tx) => {
         hostId: "7a0a1e00-9651-4071-86b8-ed32dba35bf4",
         zanr: "opsti"
        },
-    ]);
+    ]).onConflictDoNothing();
 
     await tx.insert(pitanje).values([
             {
@@ -186,7 +186,7 @@ await db.transaction(async (tx) => {
                           idKviza: idOpsti,
                    },
            
-        ]);
+        ]).onConflictDoNothing();
 });
 
 process.exit(0);
