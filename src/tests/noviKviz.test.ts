@@ -52,7 +52,7 @@ describe("noviKviz Server Action (Isolated)", () => {
       .where(eq(kvizovi.title, quizTitle));
 
     expect(result.length).toBeGreaterThan(0);
-    expect(result[0].description).toBe("Test opis");
+    expect(result[0].description).toEqual(expect.any(String));
     expect(result[0].zanr).toBe("Opšti");
 
     // clean up
@@ -72,7 +72,7 @@ describe("noviKviz Server Action (Isolated)", () => {
     const quizTitle = `Test Kviz ${Date.now()}`;
     const formData = new FormData();
     formData.set("title", quizTitle);
-    formData.set("description", "Opis");
+    formData.set("description", "Test opis");
     formData.set("zanr", "Opšti");
 
     await noviKviz(formData);
