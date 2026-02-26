@@ -37,7 +37,7 @@ describe("noviKviz Server Action (Isolated)", () => {
     }).onConflictDoNothing();
   });
 
-  it("should insert quiz into database and call redirect", async () => {
+  it("Ubacivanje opsteg kviza", async () => {
     const quizTitle = `Test Kviz ${Date.now()}`;
     const formData = new FormData();
     formData.set("title", quizTitle);
@@ -59,7 +59,7 @@ describe("noviKviz Server Action (Isolated)", () => {
     await db.delete(kvizovi).where(eq(kvizovi.title, quizTitle));
   });
 
-  it("should call notFound if user is Ucesnik", async () => {
+  it(" notFound if user is Ucesnik", async () => {
     const { getCurrentUser } = await import("@/lib/auth");
     const { notFound } = await import("next/navigation");
 
