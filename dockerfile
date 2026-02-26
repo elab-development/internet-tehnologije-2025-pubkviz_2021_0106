@@ -1,11 +1,18 @@
+
+
 # 1️⃣ Base image
 FROM node:20-alpine
+
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
 
 # 2️⃣ Set working directory
 WORKDIR /app
 
 # 3️⃣ Copy package files
 COPY package.json package-lock.json ./
+
+
 
 # 4️⃣ Install dependencies
 RUN npm install
