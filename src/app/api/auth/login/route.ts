@@ -1,75 +1,93 @@
 import { useAuth } from "@/app/components/AuthProvider";
-import { db } from "@/db";
-import { users } from "@/db/schema";
-import { AUTH_COOKIE, cookieOpts, signAuthToken } from "@/lib/auth";
+// Import konekcije na bazu i tabele
+import { db } from "@/db";                      // Konekcija na PostgreSQL preko Drizzle ORM
+import { users } from "@/db/schema";            // Tabela 'users' iz Drizzle schema fajla
+
+// Import helper-a za autentifikaciju i cookie
+import { AUTH_COOKIE, cookieOpts, signAuthToken } from "@/lib/auth"; 
+// AUTH_COOKIE → ime cookie-ja
+// cookieOpts() → opcije za cookie (httpOnly, secure, maxAge)
+// signAuthToken → funkcija koja generiše JWT token
+
+// Biblioteka za heširanje lozinki
 import bcrypt from "bcrypt";
+
+// Helper iz Drizzle ORM za WHERE klauzulu
 import { eq } from "drizzle-orm";
+
+// Next.js helper za 404 (nije korišćen u ovom fajlu)
 import { notFound } from "next/navigation";
+
+// Next.js helper za kreiranje response objekta
 import { NextResponse } from "next/server";
 
+
+// Definišemo TypeScript tip za request body
 type Body = {
-    email: string;
-    password: string;
+    email: string;       // email koji korisnik šalje
+    password: string;    // lozinka koju korisnik šalje
 };
 
 
-
+// API ruta koja reaguje na POST request
 export async function POST(req: Request) {
-    //parsiramo request, izdvajamo email i password
+
+    // 1️⃣ Parsiramo JSON body request-a i izvadimo email i password
     const {email, password} = (await req.json()) as Body;
 
-    //2. validate input,proveravamo da li su oba polja pristuna, ako nesto nedostaje vracamo 401
-  if (!email || !password) {
-    return NextResponse.json(
-      { error: "Pogesan email ili lozinka" },
-      { status: 401 }
-    );
-  }
-  // 3. Look up user by email – tražimo korisnika u bazi po email-u
-  // Ako korisnik ne postoji, vraćamo 401
-  const [u] = await db
-    .select()
-    .from(users)
-    .where(eq(users.email, email));
+    // 2️⃣ Validacija input-a: provjeravamo da li su oba polja unesena
+    if (!email || !password) {
+        return NextResponse.json(
+            { error: "Pogesan email ili lozinka" },
+            { status: 401 }          // Unauthorized
+        );
+    }
 
-  if (!u) {
-    return NextResponse.json(
-      { error: "Pogesan email ili lozinka - korisnika nema u bazi" },
-      { status: 401 }
-    );
-  }
+    // 3️⃣ Tražimo korisnika u bazi po email-u
+    const [u] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email));   // eq -> users.email = email
 
-// 4. Compare password – upoređujemo unetu lozinku sa heširanom lozinkom iz baze
-  // Ako se ne poklapaju, vraćamo 401
-  const ok = await bcrypt.compare(password, u.passHash);
-  if (!ok) {
-    return NextResponse.json(
-      { error: "Pogesan email ili lozinka" },
-      { status: 401 }
-    );
-  }
-// 5. Sign JWT – generišemo JWT token koji sadrži:
-  // sub (id korisnika), email i ime
-  const token = signAuthToken({
-    sub: u.id,
-    email: u.email,
-    username: u.username,
-    role: u.role,
-  });
+    // Ako korisnik ne postoji, vraćamo 401
+    if (!u) {
+        return NextResponse.json(
+            { error: "Pogesan email ili lozinka - korisnika nema u bazi" },
+            { status: 401 }
+        );
+    }
 
-  // 6. Set cookie with JWT – postavljamo token u cookie
-  // Cookie je httpOnly i secure (definisano u cookieOpts)
-const res = NextResponse.json({
-    id: u.id,
-    username: u.username,
-    email: u.email,
-    role: u.role,
-});
+    // 4️⃣ Provjera lozinke: upoređujemo unesenu lozinku sa hash-om iz baze
+    const ok = await bcrypt.compare(password, u.passHash);
+    if (!ok) {
+        return NextResponse.json(
+            { error: "Pogesan email ili lozinka" },
+            { status: 401 }
+        );
+    }
 
-res.cookies.set(AUTH_COOKIE, token, cookieOpts());
+    // 5️⃣ Generišemo JWT token sa informacijama o korisniku
+    const token = signAuthToken({
+        sub: u.id,           // sub → ID korisnika
+        email: u.email,      // email korisnika
+        username: u.username,// korisničko ime
+        role: u.role,        // admin ili korisnik
+    });
 
-//7 return json user data - frontend dobija osnovne podatke o korisniku 
-return res;
+    // 6️⃣ Kreiramo response JSON objekat sa osnovnim podacima korisnika
+    const res = NextResponse.json({
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        role: u.role,
+    });
+
+    // 7️⃣ Postavljamo cookie sa JWT tokenom
+    res.cookies.set(AUTH_COOKIE, token, cookieOpts()); 
+    // cookie je httpOnly i secure → ne može se čitati sa frontend JS-a
+
+    // 8️⃣ Vraćamo response frontend-u
+    return res;
 }
 
 

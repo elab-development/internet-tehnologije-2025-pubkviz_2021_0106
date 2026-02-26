@@ -1,6 +1,4 @@
-<div style="color: #333333;">
-
-# Web aplikacija za praćenje pab kviza
+# WEB APLIKACIJA - PAB KVIZ 
 
 Ova web aplikacija omogućava korisnicima da:
 
@@ -14,16 +12,28 @@ Tabele se mogu videti na: [Google Sheet](https://docs.google.com/spreadsheets/d/
 
 ## Tehnologije koje su korišćene
 
-- **Next.js** + **React** (frontend)  
-- **TypeScript**  
+- **Next.js**  
+- **TypeScript**  + **Tailwind**
 - **SheetDB + Google Sheet** (za čuvanje podataka o ekipama i rezultatima)
 - **Google Calendar API** (za prikaz događaja kvizova)
+- **PostgreSQL**
+- **Docker i Docker compose** 
 
 ### Instalacija i pokretanje
 
 1. Kloniraj repozitorijum git clone <URL_REPO>, cd <IME_PROJEKTA>
 2. Instaliraj zavisnosti npm install
-3. Pokreni development server npm run dev
+3. Pokreni aplikaciju npm start
+4. Pokreni development server npm run dev ili komande npm run build pa opet npm start
+5. Dokerizovana varijanta aplikacije pokreće se sledećim komandama : 
+   docker compose up --build
+   Ova komanda podiže dva kontejnera : jedan za aplikaciju a drugi za PostgreSQL bazu. Pored toga se kreira i novi volumen za bazu.
+   Za pokretanje ili gašenje kontejnera koriste se :
+   docker start
+   docker stop
+
+
+
 
 AUTORI :
 Aleksandar Perić 2021/0106
