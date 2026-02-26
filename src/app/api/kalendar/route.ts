@@ -23,7 +23,7 @@ export async function GET() {
   url.searchParams.append("singleEvents", "true");
   url.searchParams.append("orderBy", "startTime");
   url.searchParams.append("timeMin", now.toISOString());
-  url.searchParams.append("timeMax", future.toISOString()); 
+  url.searchParams.append("timeMax", future.toISOString()); // 🔥 KLJUČNO
   url.searchParams.append("maxResults", "2500");
   url.searchParams.append("timeZone", "Europe/Belgrade");
 
