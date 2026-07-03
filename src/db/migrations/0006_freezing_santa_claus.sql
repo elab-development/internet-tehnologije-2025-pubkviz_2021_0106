@@ -1,0 +1,1 @@
+ALTER TABLE "kvizovi" ADD COLUMN "lokacija" varchar;

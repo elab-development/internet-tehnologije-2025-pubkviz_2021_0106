@@ -21,6 +21,7 @@ export async function addPitanje(formData: FormData) {
   const odgovor = formData.get("odgovor") as string;
   const oblast = formData.get("oblast") as string;
   const poeni = Number(formData.get("poeni"));
+  
 
   if (!quizId || !tekst || !odgovor || !poeni) {
     throw new Error("Nedostaju podaci");
@@ -139,5 +140,34 @@ if (!kviz && user.role !== "Administrator") {
   
   
   redirect(`/kvizovi/${quizId}`);
+}
+export async function izmeniLokaciju(formData:FormData) {
+  const user = await getCurrentUser();
+    
+  if (!user || (user.role !== "Administrator" && user.role !== "Organizator")) {
+    notFound();
+  }
+
+  const quizId = formData.get("quizId") as string;
+  const kviz = await db.query.kvizovi.findFirst({
+    where: and(
+      eq(kvizovi.id, quizId),
+      eq(kvizovi.hostId, user.id)
+    )
+  });
+if (!kviz && user.role !== "Administrator") {
+    return notFound();
+  }
+
+  const mesto = formData.get("mesto") as string;
+const adresa = formData.get("adresa") as string;
+
+await db.update(kvizovi).set({
+
+    mesto,
+    adresa,
+  }).where( eq(kvizovi.id,quizId));
+
+   redirect(`/kvizovi/${quizId}`);
 }
 

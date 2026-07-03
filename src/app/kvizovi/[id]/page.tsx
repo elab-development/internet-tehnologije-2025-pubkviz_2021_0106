@@ -65,7 +65,33 @@ export default async function QuizPage({
     </div> //) : "Greska"
             ))} 
       
-          
+          <div className="mt-6">
+  <h2 className="text-xl font-semibold mb-3">
+    Lokacija kviza
+  </h2>
+
+  <iframe
+    className="w-full h-80 rounded-xl shadow"
+    loading="lazy"
+    allowFullScreen
+    src={`https://www.google.com/maps?q=${encodeURIComponent(
+      `${quiz.adresa}, ${quiz.mesto}`
+    )}&output=embed`}
+  />
+
+  <a
+    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+      `${quiz.adresa}, ${quiz.mesto}`
+    )}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-block mt-3 text-blue-600 hover:underline"
+  >
+    📍 Otvori u Google Maps
+  </a>
+</div>
     </div>
+
+    
   );
 }

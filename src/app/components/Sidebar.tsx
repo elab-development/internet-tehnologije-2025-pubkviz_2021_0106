@@ -4,24 +4,30 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const GENRES = ["opsti", "filmski", "sportski", "muzicki"];
-
+const MESTA = ["Beograd", "Nis", "Novi Sad", "Kragujevac"];
 type Props = {
-  onFiltersChange: (search: string, zanr: string) => void;
+  onFiltersChange: (search: string, zanr: string, mesto: string) => void;
 };
 
 
 export default function Sidebar({ onFiltersChange }: Props) {
   const [searchInput, setSearchInput] = useState("");
   const [selectedZanr, setSelectedZanr] = useState("");
+  const [selectedMesto, setSelectedMesto] = useState("");
 
   const handleSearchChange = (value: string) => {
     setSearchInput(value);
-    onFiltersChange(value, selectedZanr);
+    onFiltersChange(value, selectedZanr, selectedMesto);
   };
 
   const handleGenreChange = (value: string) => {
     setSelectedZanr(value);
-    onFiltersChange(searchInput, value);
+    onFiltersChange(searchInput, value, selectedMesto);
+  };
+
+   const handleMestoChange = (value: string) => {
+    setSelectedMesto(value);
+    onFiltersChange(searchInput, selectedZanr, value);
   };
 
   return (
@@ -50,6 +56,29 @@ export default function Sidebar({ onFiltersChange }: Props) {
         {selectedZanr && (
           <button
             onClick={() => handleGenreChange("")}
+            className="text-sm text-blue-500 mt-2"
+          >
+            Ukloni filter
+          </button>
+        )}
+      </div>
+      
+      <div>
+        <h3 className="font-semibold mb-2">Mesta</h3>
+        {MESTA.map(m => (
+          <label key={m} className="flex items-center gap-2">
+            <input
+              type="radio"
+              name="mesto"
+              checked={selectedMesto === m}
+              onChange={() => handleMestoChange(m)}
+            />
+            {m}
+          </label>
+        ))}
+        {selectedMesto && (
+          <button
+            onClick={() => handleMestoChange("")}
             className="text-sm text-blue-500 mt-2"
           >
             Ukloni filter

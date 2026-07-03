@@ -1,0 +1,1 @@
+ALTER TABLE "kvizovi" ALTER COLUMN "adresa" SET DEFAULT 'Beograd';

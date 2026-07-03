@@ -21,6 +21,8 @@ export const kvizovi = pgTable("kvizovi", {
     hostId: uuid("host_id").notNull().references(()=>users.id, {onDelete: "cascade"}),
     createdAt: timestamp("created_at").defaultNow(),
     zanr: varchar("zanr",  { length: 100 }).notNull(),
+    mesto: varchar("mesto"),
+    adresa: varchar("adresa").default("Beograd"),
 });
 
 export const pitanje = pgTable("pitanje", {

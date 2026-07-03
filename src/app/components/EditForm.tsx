@@ -1,6 +1,6 @@
 "use client";
 
-import { addPitanje,izmeniPitanje,obrisiPitanje } from "@/app/kvizovi/[id]/izmeni/actions";
+import { addPitanje,izmeniPitanje,obrisiPitanje,izmeniLokaciju } from "@/app/kvizovi/[id]/izmeni/actions";
 import { getCurrentUser } from "@/lib/auth";
 
 export default function EditForm({ quizId }: { quizId: string }) {
@@ -64,7 +64,7 @@ export default function EditForm({ quizId }: { quizId: string }) {
         Obriši
       </button>
     </form>
-
+      {/*Izmeni*/}
     <form action={izmeniPitanje} className="flex flex-col gap-4">
   <h2 className="font-bold">Izmeni pitanje</h2>
 
@@ -83,6 +83,32 @@ export default function EditForm({ quizId }: { quizId: string }) {
   <input data-testid="edit-poeni" className="border rounded p-2" name="poeni" type="number" placeholder="Poeni" />
 
   <button data-testid="save-edit" id="izmeniPitanje" className="bg-blue-600 p-2 rounded hover:bg-amber-500">Sačuvaj</button>
+</form>
+
+<form action={izmeniLokaciju} className="flex flex-col gap-">
+  <h2 className="font-bold">Izmeni lokaciju kviza</h2>
+
+  <input type="hidden" name="quizId" value={quizId} />
+  <label htmlFor="mesto"></label>
+  <input
+    id="mesto"
+    name="mesto"
+    type="text"
+    placeholder="Mesto"
+    className="border p-2 rounded"
+  />
+
+
+
+  <label htmlFor="lokacija"></label>
+  <input
+    id="adresa"
+    name="adresa"
+    type="text"
+    placeholder="Adresa"
+    className="border p-2 rounded"
+  />
+  <button data-testid="save-edit" id="izmeniLokaciju" className="bg-blue-600 p-2 rounded hover:bg-amber-500">Sačuvaj</button>
 </form>
 
     </div>

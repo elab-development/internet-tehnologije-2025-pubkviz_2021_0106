@@ -32,11 +32,36 @@ const user = await getCurrentUser();
           placeholder="Kategorija"
           className="border p-2 rounded"
         />
+         
+  <label htmlFor="mesto"></label>
+  <input
+    id="mesto"
+    name="mesto"
+    type="text"
+    placeholder="Mesto"
+    className="border p-2 rounded"
+  />
+
+
+
+  <label htmlFor="lokacija"></label>
+  <input
+    id="adresa"
+    name="adresa"
+    type="text"
+    placeholder="Adresa"
+    className="border p-2 rounded"
+  />
+
 
         <button type="submit" className="bg-green-600 text-white p-2 rounded hover:bg-green-300">
           Kreiraj kviz
         </button>
+
+       
       </form>
+
+
     </div>
     );
 }

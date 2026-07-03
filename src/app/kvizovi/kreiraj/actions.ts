@@ -15,6 +15,8 @@ export async function noviKviz(formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const zanr = formData.get("zanr") as string;
+  const mesto = formData.get("mesto") as string;
+  const adresa = formData.get("adresa") as string;
 
   if (!title) {
     throw new Error("Naziv kviza je obavezan");
@@ -28,6 +30,8 @@ export async function noviKviz(formData: FormData) {
       description,
         hostId: user.id, 
       zanr,
+      mesto,
+      adresa,
      
     })
     .returning();

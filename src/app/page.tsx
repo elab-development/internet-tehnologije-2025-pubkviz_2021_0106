@@ -11,13 +11,14 @@ import { useEffect, useState } from "react";
 export default function QuizListPage() {
   const [search, setSearch] = useState("");
   const [zanr, setZanr] = useState("");
+  const [mesto, setMesto]=useState("");
   const [quizzes, setQuizzes] = useState<any[]>([]);
 
   const fetchQuizzes = async () => {
     let url = `/api/quizzes?`;
     if (search) url += `search=${search}&`;
     if (zanr) url += `zanr=${zanr}&`;
-
+    if (mesto) url += `mesto=${mesto}&`;
     const res = await fetch(url);
     const data = await res.json();
     setQuizzes(data);
@@ -25,13 +26,13 @@ export default function QuizListPage() {
 
    useEffect(() => {
     fetchQuizzes();
-  }, [search, zanr]);
+  }, [search, zanr, mesto]);
 
 
   return (
     <>
       
-      <Sidebar onFiltersChange={(s, z) => { setSearch(s); setZanr(z); }} />
+      <Sidebar onFiltersChange={(s, z, m) => { setSearch(s); setZanr(z); setMesto(m); }} />
 
       <main className="flex-1 p-4 space-y-8">
         

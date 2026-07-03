@@ -1,16 +1,31 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { kvizovi } from "@/db/schema";
-import { ilike, eq, and } from "drizzle-orm";
+import { ilike, eq, and, or } from "drizzle-orm";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const search = searchParams.get("search") ?? "";
   const zanr = searchParams.get("zanr") ?? "";
+  const mesto = searchParams.get("mesto") ?? "";
 
   const conditions = [];
-  if (search) conditions.push(ilike(kvizovi.title, `%${search}%`));
-  if (zanr) conditions.push(eq(kvizovi.zanr, zanr));
+    if (search) {
+    conditions.push(
+      or(
+        ilike(kvizovi.title, `%${search}%`),
+        ilike(kvizovi.mesto, `%${search}%`)
+      )
+    );
+  }
+
+  if (zanr) {
+    conditions.push(eq(kvizovi.zanr, zanr));
+  }
+
+  if (mesto) {
+    conditions.push(eq(kvizovi.mesto, mesto));
+  }
 
   const quizzesDB = await db
     .select()
@@ -23,6 +38,7 @@ export async function GET(req: Request) {
     description: q.description ?? "",
     date: q.createdAt ? q.createdAt.toLocaleDateString() : "Unknown date",
     zanr: q.zanr,
+    mesto: q.mesto,
   }));
 
   return NextResponse.json(quizzes);
