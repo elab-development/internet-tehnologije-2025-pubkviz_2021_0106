@@ -2,7 +2,7 @@
 
 import { addPitanje,izmeniPitanje,obrisiPitanje,izmeniLokaciju } from "@/app/kvizovi/[id]/izmeni/actions";
 import { getCurrentUser } from "@/lib/auth";
-
+import GenerisiPitanja from "./GenerateButton";
 export default function EditForm({ quizId }: { quizId: string }) {
   
   return (
@@ -46,7 +46,9 @@ export default function EditForm({ quizId }: { quizId: string }) {
         <button id="dodajPitanje" className="bg-amber-600 hover:bg-blue-400 p-2 rounded">
           Submit
         </button>
+        
       </form>
+      <GenerisiPitanja quizId={quizId} />
         {/*Obrisi*/}
       <form action={obrisiPitanje} className="flex flex-col gap-4">
          <h2 className="font-bold">Obrisi neko pitanje</h2>
