@@ -12,36 +12,50 @@ export default function GenerisiInterfejs({
   quizId,
   onClose,
 }: Props) {
+  const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+
   const router = useRouter();
   
   const [tema, setTema] = useState("");
   const [tezina, setTezina] = useState("Srednje");
   const [brojPitanja, setBrojPitanja] = useState(5);
 async function handleGenerate() {
-  const response = await fetch("/api/ai/generate-questions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      quizId,
-      tema,
-      tezina,
-      brojPitanja,
-    }),
-  });
+  try {
+    setLoading(true);
+    setError("");
 
-  const data = await response.json();
-  
-  console.log(data.text);
-  if (data.success) {
-    onClose();
-    router.push(`/kvizovi/${quizId}`);
-    router.refresh();
-} else {
-    // prikaži popup ili poruku o grešci
-}
-  
+    const response = await fetch("/api/ai/generate-questions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        quizId,
+        tema,
+        tezina,
+        brojPitanja,
+      }),
+    });
+
+    const data = await response.json();
+
+    console.log(data.text);
+
+    if (data.success) {
+      onClose();
+      router.push(`/kvizovi/${quizId}`);
+      router.refresh();
+    } else {
+      setError("Greška prilikom generisanja pitanja.");
+    }
+
+  } catch (error) {
+    console.error(error);
+    setError("Došlo je do greške.");
+  } finally {
+    setLoading(false);
+  }
 }
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
@@ -120,10 +134,16 @@ async function handleGenerate() {
 
           <button
   onClick={handleGenerate}
-  className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+  disabled={loading}
+  className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
 >
-  Generiši
+  {loading ? "🤖 Generišem pitanja..." : "Generiši"}
 </button>
+{error && (
+  <p className="text-red-500 mt-4">
+    {error}
+  </p>
+)}
 
         </div>
 
