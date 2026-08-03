@@ -1,4 +1,3 @@
-
 import "./globals.css";
 import { AuthProvider } from "./components/AuthProvider";
 import Sidebar2 from "./components/Sidebar2";
