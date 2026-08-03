@@ -1,0 +1,1 @@
+ALTER TABLE "ekipa" ADD COLUMN "naziv" text NOT NULL;

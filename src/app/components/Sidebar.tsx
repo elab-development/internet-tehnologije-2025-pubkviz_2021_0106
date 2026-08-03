@@ -1,16 +1,16 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 const GENRES = ["opsti", "filmski", "sportski", "muzicki"];
 const MESTA = ["Beograd", "Nis", "Novi Sad", "Kragujevac"];
+
 type Props = {
   onFiltersChange: (search: string, zanr: string, mesto: string) => void;
+  onAISearch: () => void;
 };
 
-
-export default function Sidebar({ onFiltersChange }: Props) {
+export default function Sidebar({ onFiltersChange, onAISearch }: Props) {
   const [searchInput, setSearchInput] = useState("");
   const [selectedZanr, setSelectedZanr] = useState("");
   const [selectedMesto, setSelectedMesto] = useState("");
@@ -25,24 +25,30 @@ export default function Sidebar({ onFiltersChange }: Props) {
     onFiltersChange(searchInput, value, selectedMesto);
   };
 
-   const handleMestoChange = (value: string) => {
+  const handleMestoChange = (value: string) => {
     setSelectedMesto(value);
     onFiltersChange(searchInput, selectedZanr, value);
   };
 
   return (
-    <aside className="w-64 p-4 border-r space-y-4">    
+    <aside className="w-64 p-4 border-r space-y-4">
       <input
         type="text"
         placeholder="Pretrazite kvizove..."
         value={searchInput}
-        onChange={e => handleSearchChange(e.target.value)}
+        onChange={(e) => handleSearchChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onAISearch();
+          }
+        }}
         className="w-full border rounded p-2"
       />
 
       <div>
         <h3 className="font-semibold mb-2">Zanrovi</h3>
-        {GENRES.map(g => (
+
+        {GENRES.map((g) => (
           <label key={g} className="flex items-center gap-2">
             <input
               type="radio"
@@ -53,6 +59,7 @@ export default function Sidebar({ onFiltersChange }: Props) {
             {g}
           </label>
         ))}
+
         {selectedZanr && (
           <button
             onClick={() => handleGenreChange("")}
@@ -62,10 +69,11 @@ export default function Sidebar({ onFiltersChange }: Props) {
           </button>
         )}
       </div>
-      
+
       <div>
         <h3 className="font-semibold mb-2">Mesta</h3>
-        {MESTA.map(m => (
+
+        {MESTA.map((m) => (
           <label key={m} className="flex items-center gap-2">
             <input
               type="radio"
@@ -76,6 +84,7 @@ export default function Sidebar({ onFiltersChange }: Props) {
             {m}
           </label>
         ))}
+
         {selectedMesto && (
           <button
             onClick={() => handleMestoChange("")}

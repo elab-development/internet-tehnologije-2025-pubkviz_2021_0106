@@ -36,6 +36,7 @@ export const pitanje = pgTable("pitanje", {
 
 export const ekipa = pgTable("ekipa", {
   id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  naziv: text("naziv").notNull(),
   poeni: integer("poeni").default(0),
   rank: integer("rank"),
 });

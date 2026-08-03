@@ -2,9 +2,17 @@
 
 import { db } from "@/db";
 import { kvizovi, pitanje } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, ne } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import EditButton from "@/app/components/EditButton";
+
+type QuizRecommendation = {
+  id: string;
+  title: string;
+  description: string | null;
+  mesto: string | null;
+  adresa: string | null;
+};
 
 export default async function QuizPage({
   params,
@@ -14,20 +22,7 @@ export default async function QuizPage({
   const { id } = await params; // unwrap the Promise
 
   
-  {/*const result = await db
-    .select()
-    .from(kvizovi)
-    .where(eq(kvizovi.id, id))
-    .limit(1);
-
-  const quiz = result[0];
-
-  if (!quiz) {
-    notFound(); 
-  }
-
-  const pitanja = await db
-    .select().from(pitanje);*/}
+ 
      const quiz = await db.query.kvizovi.findFirst({
     where: eq(kvizovi.id, id),
   });
@@ -38,8 +33,27 @@ export default async function QuizPage({
     .select()
     .from(pitanje)
     .where(eq(pitanje.idKviza, quiz.id));
+    const otherQuizzes = await db.query.kvizovi.findMany({
+  where: ne(kvizovi.id, quiz.id),
+});
 
- 
+const response = await fetch(
+  "http://localhost:3000/api/ai/recommended",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      quizId: quiz.id,
+    }),
+    cache: "no-store",
+  }
+);
+
+const data = await response.json();
+
+const recommendedQuizzes = data.quizzes;
 
   return (
     
@@ -89,6 +103,40 @@ export default async function QuizPage({
   >
     📍 Otvori u Google Maps
   </a>
+</div>
+<div className="mt-10">
+  <h2 className="text-2xl font-bold mb-5">
+    Preporučeni kvizovi
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {recommendedQuizzes.map((recommendedQuiz: QuizRecommendation) => (
+      <div
+        key={recommendedQuiz.id}
+        className="border rounded-xl p-5 shadow hover:shadow-lg transition"
+      >
+        <h3 className="text-xl font-semibold">
+          {recommendedQuiz.title}
+        </h3>
+
+        <p className="mt-2 text-gray-700">
+          {recommendedQuiz.description}
+        </p>
+
+        <div className="mt-4 text-sm text-gray-500">
+          <p>
+            <span className="font-medium">📍 Mesto:</span>{" "}
+            {recommendedQuiz.mesto}
+          </p>
+
+          <p>
+            <span className="font-medium">🏠 Adresa:</span>{" "}
+            {recommendedQuiz.adresa}
+          </p>
+        </div>
+      </div>
+    ))}
+  </div>
 </div>
     </div>
 
