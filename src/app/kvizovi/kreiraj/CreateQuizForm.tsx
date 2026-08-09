@@ -13,6 +13,8 @@ export default function CreateQuizForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [prethodnaPreporuka, setPrethodnaPreporuka] = useState("");
+
   async function preporuciLokaciju() {
     if (!preporuceniGrad.trim()) {
       setError("Unesite grad.");
@@ -34,9 +36,10 @@ export default function CreateQuizForm() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          mesto: preporuceniGrad,
-          brojTimova: Number(brojTimova),
-        }),
+  mesto: preporuceniGrad,
+  brojTimova: Number(brojTimova),
+  prethodnaPreporuka,
+}),
       });
 
       const data = await response.json();
@@ -46,6 +49,8 @@ export default function CreateQuizForm() {
       }
 
       setLokacija(data.preporuka.adresa);
+
+      setPrethodnaPreporuka(data.preporuka.naziv);
 
       if (!mesto.trim()) {
         setMesto(preporuceniGrad);
@@ -95,7 +100,7 @@ export default function CreateQuizForm() {
         />
 
         <input
-          name="lokacija"
+          name="adresa"
           placeholder="Adresa"
           value={lokacija}
           onChange={(e) => setLokacija(e.target.value)}

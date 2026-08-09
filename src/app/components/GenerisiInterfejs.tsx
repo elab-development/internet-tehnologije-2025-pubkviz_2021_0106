@@ -137,7 +137,7 @@ async function handleGenerate() {
   disabled={loading}
   className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
 >
-  {loading ? "🤖 Generišem pitanja..." : "Generiši"}
+  {loading ? " Generišem pitanja..." : "Generiši"}
 </button>
 {error && (
   <p className="text-red-500 mt-4">

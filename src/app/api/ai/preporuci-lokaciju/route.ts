@@ -79,7 +79,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    const { mesto, brojTimova } = body;
+    const { mesto, brojTimova, prethodnaPreporuka } = body;
 
     if (!mesto || !brojTimova) {
       return Response.json(
@@ -192,60 +192,33 @@ console.log("LOKALI:", places);
         { status: 404 }
       );
     }
+const shuffledPlaces = [...places].sort(() => Math.random() - 0.5);
 
     // Ograničimo broj rezultata koje šaljemo OpenAI-ju
-    const ograniceniLokali = places.slice(0, 50);
+    const ograniceniLokali = shuffledPlaces.slice(0, 50);
 
     // 2. OpenAI bira najpogodniji lokal
     const response = await client.responses.create({
       model: "gpt-5.4",
-      input: `
-Ti preporučuješ lokaciju za održavanje pub kviza.
-
-Grad: ${mesto}
-
-Očekivani broj timova: ${brojTimova}
-
-Svaki tim ima između 3 i 6 članova.
-
-Očekivani broj učesnika:
-${minPeople}–${maxPeople}
-
-Ispod se nalazi lista STVARNIH lokala pronađenih iz OpenStreetMap baze.
-
-Tvoj zadatak je da izabereš najpogodniji lokal za pub kviz.
-
-Prioritet imaju:
-- pubovi i barovi
-- zatim kafići i restorani
-- lokali koji deluju pogodno za grupno okupljanje
-- lokali koji su prikladni za očekivani broj učesnika
-
-VEOMA VAŽNA PRAVILA:
-
-- Smeš da izabereš ISKLJUČIVO lokal koji se nalazi na listi.
-- Ne smeš da izmišljaš lokal.
-- Ne smeš da izmišljaš adresu.
-- Ne smeš da menjaš naziv ili adresu lokala.
-- Ne smeš da kombinuješ naziv jednog lokala sa adresom drugog.
-- Ako nema dovoljno podataka za sigurnu preporuku, ipak izaberi najrazumniji lokal sa liste.
-
-Lokali:
-
-${JSON.stringify(ograniceniLokali, null, 2)}
-
-Vrati ISKLJUČIVO validan JSON objekat.
-Bez markdown-a.
-Bez dodatnog teksta.
-
-Format:
-
-{
-  "naziv": "tačan naziv sa liste",
-  "adresa": "tačna adresa sa liste",
-  "obrazlozenje": "kratko objašnjenje zašto je ovaj lokal najpogodniji"
-}
-`,
+      input: `Ti preporučuješ lokaciju za održavanje pub kviza. 
+      Grad: ${mesto} 
+      Očekivani broj timova: ${brojTimova} 
+      Svaki tim ima između 3 i 6 članova. 
+      Očekivani broj učesnika: ${minPeople}–${maxPeople} 
+      Ispod se nalazi lista STVARNIH lokala pronađenih iz OpenStreetMap baze. Tvoj zadatak je da izabereš najpogodniji lokal za pub kviz. 
+      Prioritet imaju: 
+      - pubovi i barovi 
+      - zatim kafići i restorani 
+      - lokali koji deluju pogodno za grupno okupljanje 
+      - lokali koji su prikladni za očekivani broj učesnika 
+      
+      VEOMA VAŽNA PRAVILA: - Smeš da izabereš ISKLJUČIVO lokal koji se nalazi na listi. 
+      - Ne smeš da izmišljaš lokal. 
+      - Ne smeš da izmišljaš adresu. 
+      - Ne smeš da menjaš naziv ili adresu lokala. 
+      - Ne smeš da kombinuješ naziv jednog lokala sa adresom drugog. 
+      - Ako nema dovoljno podataka za sigurnu preporuku, ipak izaberi najrazumniji lokal sa liste. ${prethodnaPreporuka ? ` PRETHODNA PREPORUKA: Prethodno je korisniku preporučen lokal: "${prethodnaPreporuka}" Ako postoji druga dovoljno dobra opcija na listi, NEMOJ ponovo preporučiti ovaj lokal. Pokušaj da izabereš drugi lokal koji je odgovarajući za pub kviz i očekivani broj učesnika. Ako je prethodni lokal očigledno najbolja ili jedina razumna opcija među ponuđenim lokalima, možeš ga ponovo preporučiti. ` : ""} 
+      Lokali: ${JSON.stringify(ograniceniLokali, null, 2)} Vrati ISKLJUČIVO validan JSON objekat. Bez markdown-a. Bez dodatnog teksta. Format: { "naziv": "tačan naziv sa liste", "adresa": "tačna adresa sa liste", "obrazlozenje": "kratko objašnjenje zašto je ovaj lokal najpogodniji" }`
     });
 
     const preporuka = JSON.parse(response.output_text);
