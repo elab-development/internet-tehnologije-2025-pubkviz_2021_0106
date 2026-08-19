@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 const GENRES = ["opsti", "filmski", "sportski", "muzicki"];
-const MESTA = ["Beograd", "Nis", "Novi Sad", "Kragujevac"];
+const MESTA = ["Beograd", "Nis", "Novi Sad", "Ostalo"];
 
 type Props = {
   onFiltersChange: (search: string, zanr: string, mesto: string) => void;

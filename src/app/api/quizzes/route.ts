@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { kvizovi } from "@/db/schema";
-import { ilike, eq, and, or } from "drizzle-orm";
+import { ilike, eq, and, or, not, inArray } from "drizzle-orm";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
@@ -10,28 +10,24 @@ export async function GET(req: Request) {
   const mesto = searchParams.get("mesto") ?? "";
 
   const conditions = [];
-    if (search) {
-    conditions.push(
-      or(
+  if (search) {conditions.push( or(
         ilike(kvizovi.title, `%${search}%`),
         ilike(kvizovi.mesto, `%${search}%`)
-      )
-    );
-  }
-
-  if (zanr) {
+      ));}
+if (zanr) {
     conditions.push(eq(kvizovi.zanr, zanr));
   }
-
   if (mesto) {
-    conditions.push(eq(kvizovi.mesto, mesto));
+    if (mesto === "Ostalo") {conditions.push(not(
+          inArray(kvizovi.mesto, ["Beograd", "Nis", "Novi Sad"])
+        )    );  } else {
+      conditions.push(eq(kvizovi.mesto, mesto));
+    }
   }
-
   const quizzesDB = await db
     .select()
     .from(kvizovi)
     .where(conditions.length ? and(...conditions) : undefined);
-
   const quizzes = quizzesDB.map(q => ({
     id: q.id,
     title: q.title,
@@ -40,6 +36,4 @@ export async function GET(req: Request) {
     zanr: q.zanr,
     mesto: q.mesto,
   }));
-
-  return NextResponse.json(quizzes);
-}
+  return NextResponse.json(quizzes);}

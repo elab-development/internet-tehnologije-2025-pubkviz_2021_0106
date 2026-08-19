@@ -33,7 +33,7 @@ export const swaggerSpec = {
         },
       },
     },
-    "/api/ekipa/{ekipaId}/clanovi": {
+    "/api/ekipe/{ekipaId}/clanovi": {
       post: {
         summary: "Dodavanje člana u ekipu",
         parameters: [
@@ -79,8 +79,100 @@ export const swaggerSpec = {
         },
       },
     },
+    "/api/ai/generate-questions": {
+      post: {
+        summary: "Generiše pitanja uz pomoć OpenAI API-ja",
+        parameters: [
+          {
+            name: "oblast",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "oblast za koju se traže pitanja",
+          },
+          {
+            name: "broj",
+            in: "path",
+            required: true,
+            schema: { type: "integer" },
+            description: "koliko pitanja generisati",
+          },
+          {
+            name: "težina",
+            in: "path",
+            required: true,
+            schema: { type: "string" },
+            description: "nivo težine traženih pitanja",
+          },
+        ],
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: { broj: { type: "integer" }, oblast: { type: "string" }, težina: { type: "string" }   },
+                required: ["broj,oblast,težina"],
+              },
+            },
+          },
+        },
+        responses: {
+          200: { description: "Pitanja uspešno generisana" },
+          400: { description: "Greška pri komunikaciji sa OpenAI API" },
+        },
+      },
+    },
+    "/api/ai/preporuci-lokaciju": {
+      post : {
+        summary: "Dohvata buduće događaje iz Google Kalendara",
+        responses: {
+          200: {
+            description: "Lista događaja",
+            content: {
+              "application/json": {
+                schema: { type: "object" },
+              },
+            },
+          },
+          500: { description: "Greška pri fetch-u događaja" },
+        },
+      },
+    },
+    "/api/ai/recommended": {
+      post : {
+        summary: "Pravi preporuke za slične kvizove",
+        responses: {
+          200: {
+            description: "Uspešno nađeni slični kvizovi",
+            content: {
+              "application/json": {
+                schema: { type: "object" },
+              },
+            },
+          },
+          500: { description: "Greška pri komunikaciji sa OpenAI serverima" },
+        },
+      },
+    },
+    "/api/ai/search": {
+      post : {
+        summary: "Pretražuje i slične i srodne kvizove iz baze, ne samo one koji se zovu identično kao korisnički upit",
+        responses: {
+          200: {
+            description: "Lista kvizova",
+            content: {
+              "application/json": {
+                schema: { type: "object" },
+              },
+            },
+          },
+          500: { description: "Greška pri fetch-u kvizova" },
+        },
+      },
+    },
     "/api/quizzes": {
-      get: {
+      post : {
         summary: "Dohvata listu kvizova sa opcionalnim filterima",
         parameters: [
           {
